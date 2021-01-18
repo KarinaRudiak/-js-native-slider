@@ -1,23 +1,24 @@
-class Carousel {
-  constructor(s) {
-    let settings = this._initConfig(s);
+function Carousel(containerID = '#carousel', slideID = '.slide') {
+  console.log(containerID);
+  console.log(slideID);
+  this.container = document.querySelector(containerID);
+  this.slides = this.container.querySelectorAll( slideID);
+  
+  this.interval = 2000;
 
-    this.container = document.querySelector(settings.containerID);
-    this.slides = this.container.querySelectorAll(settings.slideID);
-    this.interval = settings.interval;
+  this._initProps();
+  this._initIndicators();
+  this._initControls();
+  this._initListeners();
+}
 
-  }
-
-  _initConfig(o) {
-    return {...{containerID: '#carousel', interval: 5000, slideID: '.slide'}, ...o};
-  }
-
+Carousel.prototype = {
   _initProps() { 
     this.currentSlide = 0;
     this.slidesCount = this.slides.length;
     this.isPlaying = true;
     
-    
+
     this.CLASS_TRIGGER = 'active';
     this.FA_PAUSE = '<i class="fa fa-pause-circle"></i>';
     this.FA_PLAY ='<i class="fa fa-play-circle"></i>';
@@ -26,7 +27,7 @@ class Carousel {
     this.SPACE = ' ';
     this.LEFT_ARROW = 'ArrowLeft';
     this.RIGHT_ARROW = 'ArrowRight';
-  }
+  },
 
   _initControls() {
     const controls = document.createElement('div');
@@ -45,7 +46,7 @@ class Carousel {
     this.pauseBtn = this.container.querySelector('#pause-btn');
     this.prevBtn = this.container.querySelector('#prev-btn');
     this.nextBtn = this.container.querySelector('#next-btn');
-  }
+  },
 
   _initIndicators() {
     const indicators = document.createElement('ol');
@@ -69,7 +70,7 @@ class Carousel {
 
     this.indicatorsContainer = this.container.querySelector('#indicators-container');
     this.indicators = this.indicatorsContainer.querySelectorAll('.indicator');
-  }
+  },
 
   _initListeners() {
     this.pauseBtn.addEventListener('click', this.pausePlay.bind(this));
@@ -77,7 +78,7 @@ class Carousel {
     this.nextBtn.addEventListener('click', this.next.bind(this));
     this.indicatorsContainer.addEventListener('click', this._indicate.bind(this));
     document.addEventListener('keydown', this._pressKey.bind(this));
-  }
+  },
 
   _indicate(e) {
     let target = e.target;
@@ -86,35 +87,34 @@ class Carousel {
       this.pause();
       this.gotoNth(+target.dataset.slideTo);
     }
-  }
+  },
 
   _pressKey(e) {
     if (e.key === this.LEFT_ARROW) prev();
     if (e.key === this.RIGHT_ARROW) next();
     if (e.key === this.SPACE) pausePlay();
-  }
+  },
 
-  gotoNth(n) {
+  gotoNth: function (n) {
   this.slides[this.currentSlide].classList.toggle(this.CLASS_TRIGGER);
   this.indicators[this.currentSlide].classList.toggle(this.CLASS_TRIGGER);
   this.currentSlide = (n + this.slidesCount) % this.slidesCount;
   this.slides[this.currentSlide].classList.toggle(this.CLASS_TRIGGER);
   this.indicators[this.currentSlide].classList.toggle(this.CLASS_TRIGGER);
-  }
+  },
   
   gotoNext() {
     this.gotoNth(this.currentSlide + 1);
-  }
+  },
   
   gotoPrev() {
     this.gotoNth(this.currentSlide - 1);
-  }
-
+  },
   pause() {
     this.pauseBtn.innerHTML = this.FA_PLAY;
     clearInterval(this.timerID);
     this.isPlaying = false;
-  }
+  },
   
   play() {
     this.pauseBtn.innerHTML = this.FA_PAUSE;
@@ -123,62 +123,53 @@ class Carousel {
       that.gotoNext();
     }, this.interval);
     this.isPlaying = true;
-  }
+  },
     
   pausePlay() {
     this.isPlaying ? this.pause() : this.play();
-  }
+  },
 
   next() {
     this.pause();
     this.gotoNext();
-  }
+  },
   
   prev() {
     this.pause();
     this.gotoPrev();
-  }
+  }, 
   
   init() {
-    this._initProps();
-    this._initIndicators();
-    this._initControls();
-    this._initListeners();
-
-    this.timerID = setInterval(() => this.gotoNext(), this.interval);
+    this.timerID = setInterval(function() {
+      this.gotoNext();
+    }, this.interval);
   }
+};
+
+function SwipeCarousel() {
+  Carousel.apply(this, arguments);
 }
 
-class SwipeCarousel extends Carousel {
-  
-  _initListeners() {
-    super._initListeners();
+SwipeCarousel.prototype = Object.create(Carousel.prototype);
+SwipeCarousel.prototype.constructor = SwipeCarousel;
 
-    this.container.addEventListener('touchstart', this._swipeStart.bind(this));
-    this.container.addEventListener('touchend', this._swipeEnd.bind(this));
-  }
+SwipeCarousel.prototype._initListeners = function() {
+  Carousel.prototype._initListeners.apply(this);
+  this.container.addEventListener('touchstart', this._swipeStart.bind(this));
+  this.container.addEventListener('touchend', this._swipeEnd.bind(this));
+};
 
-  _swipeStar(e) {
-    if (e.changedTouches === 1) this.swipeStartX = e.changedTouches[0].pageX;
-  }
+SwipeCarousel.prototype._swipeStart = function(e) {
+  if (e.changedTouches === 1) this.swipeStartX = e.changedTouches[0].pageX;
+};
 
-_swipeEnd(e) {
+SwipeCarousel.prototype._swipeEnd = function(e) {
   if (e.changedTouches.length === 1) {
     this.swipeEndX = e.changedTouches[0].pageX;
     if (this.swipeStartX - this.swipeEndX < 0) this.prev();
     if (this.swipeStartX - this.swipeEndX > 0) this.next();
-    };
-  }
-}
-  
-
-
-
-
-
-
-
-
+  };
+};
 
 
 

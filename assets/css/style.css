@@ -516,6 +516,14 @@ just for appearance; change whatever you want
   background: purple;
 }
 
+.slide:nth-of-type(6) {
+  background: tomato;
+}
+
+.slide:nth-of-type(7) {
+  background: yellow;
+}
+
 .controls {
   display: -webkit-box;
   display: -ms-flexbox;

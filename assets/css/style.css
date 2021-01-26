@@ -462,8 +462,11 @@ these make the slideshow work
 */
 .slides {
   position: relative;
-  height: 150px;
-  margin-bottom: 20px;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  background: black;
 }
 
 .slide {
@@ -489,7 +492,7 @@ just for appearance; change whatever you want
 */
 .slide {
   font-size: 40px;
-  padding: 40px;
+  padding: 0px;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   background: #333;
@@ -542,7 +545,7 @@ just for appearance; change whatever you want
           justify-content: center;
   list-style: none;
   padding: 0;
-  margin: 0 0 5px 0;
+  margin: -100px 0 10px 0;
 }
 
 .indicators > li {
@@ -550,7 +553,7 @@ just for appearance; change whatever you want
 }
 
 .indicators .active {
-  background-color: tomato;
+  border: 2px dotted white;
 }
 
 .indicator,
@@ -558,19 +561,25 @@ just for appearance; change whatever you want
   margin-right: 15px;
   display: inline-block;
   padding: 10px 20px;
-  background-color: #cccccc;
+  border: 2px solid black;
   cursor: pointer;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
-  height: 40px;
-  min-width: 40px;
+  height: 10px;
+  min-width: 1px;
+  z-index: 1;
+  border-radius: 30px;
 }
 
 .control {
   display: block;
   text-align: center;
-  padding-top: 23px;
-  padding-bottom: 0px;
+  padding-top: 6px;
+  padding-bottom: 10px;
+}
+
+html {
+  overflow: hidden;
 }

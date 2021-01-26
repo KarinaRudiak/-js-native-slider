@@ -1,5 +1,5 @@
 let carousel = new SwipeCarousel({
-  interval:500,
+  interval: 1500,
 });
 
 carousel.init();

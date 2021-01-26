@@ -8,7 +8,7 @@ class Carousel {
 
   _initConfig(o) {
 
-    return {...{containerID: '#carousel',interval: 1000,sliderID: '.slide'}, ...o};
+    return {...{containerID: '#carousel', interval: 1000, sliderID: '.slide'}, ...o};
   }
   _initProps() {
     this.CLASS_TRIGGER = 'active';
@@ -49,24 +49,24 @@ class Carousel {
       const controls = document.createElement('div');
       this.container.appendChild(controls);
 
-      const PAUSE = `<span id="pause-btn" class="control control-pause">${this.FA_PAUSE}</span>`;
       const PREV = `<span id="prev-btn" class="control control-prev">${this.FA_PREV}</span>`;
+      const PAUSE = `<span id="pause-btn" class="control control-pause">${this.FA_PAUSE}</span>`;
       const NEXT = `<span id="next-btn" class="control control-next">${this.FA_NEXT}</span>`;
       controls.setAttribute('class','controls');
       controls.setAttribute('id', 'controls-container');
 
-      controls.innerHTML = PAUSE + PREV + NEXT;
+      controls.innerHTML = PREV + PAUSE + NEXT;
   
 
    this.controlsContainer = this.container.querySelector('#controls-container');
-   this.pauseBtn = this.container.querySelector('#pause-btn');
    this.prevBtn = this.container.querySelector('#prev-btn');
+   this.pauseBtn = this.container.querySelector('#pause-btn');
    this.nextBtn = this.container.querySelector('#next-btn');
   }
 
   _initListeners() {
-    this.pauseBtn.addEventListener('click', this.pausePlay.bind(this)); 
     this.prevBtn.addEventListener('click', this.prev.bind(this));  
+    this.pauseBtn.addEventListener('click', this.pausePlay.bind(this)); 
     this.nextBtn.addEventListener('click', this.next.bind(this));  
     this.indicatorsContainer.addEventListener('click', this._indicate.bind(this)); 
     document.addEventListener('keydown', this._pressKey.bind(this));  
@@ -87,7 +87,6 @@ class Carousel {
     }
    }
   
-
    gotoNth(n) {
     this.slides[this.currentSlide].classList.toggle(this.CLASS_TRIGGER);  
     this.indicators[this.currentSlide].classList.toggle(this.CLASS_TRIGGER);  
@@ -118,13 +117,14 @@ class Carousel {
    this.pauseBtn.innerHTML = this.FA_PAUSE; 
   }
 
-  pausePlay() {
-    this.isPlaying  ? this.pause() : this.play();
-  }
 
   next() {
    this.pause();  
    this.gotoNext();
+  }
+
+  pausePlay() {
+    this.isPlaying  ? this.pause() : this.play();
   }
   
   prev() {
